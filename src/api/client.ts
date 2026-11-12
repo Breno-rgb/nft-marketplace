@@ -1,12 +1,14 @@
 import axios, { isAxiosError } from 'axios'
 import { avisarQueSessaoExpirou, obterToken } from '../lib/sessao'
+import { mocksProntos } from '../lib/ambiente'
 
 export const api = axios.create({
   baseURL: '/api',
   timeout: 10000,
 })
 
-api.interceptors.request.use((config) => {
+api.interceptors.request.use(async (config) => {
+  await mocksProntos
   const token = obterToken()
   if (token) config.headers.Authorization = `Bearer ${token}`
   return config

@@ -8,7 +8,7 @@ import { limparDadosPrivados, queryClient } from './lib/queryClient'
 import { quandoSessaoExpirar } from './lib/sessao'
 import { CHAVE_SESSAO } from './hooks/useSessao'
 import { avisar } from './lib/avisos'
-import { mocksAtivos } from './lib/ambiente'
+import { avisarQueMocksEstaoProntos, mocksAtivos } from './lib/ambiente'
 
 quandoSessaoExpirar(() => {
   queryClient.setQueryData(CHAVE_SESSAO, null)
@@ -18,18 +18,23 @@ quandoSessaoExpirar(() => {
   else avisar('Sua sessão expirou. Entre novamente quando quiser.', 'info')
 })
 
+import { worker } from './mocks/browser'
+
 async function iniciarMocks() {
   if (!mocksAtivos) return
-  const { worker } = await import('./mocks/browser')
   await worker.start({ quiet: true })
 }
 
-iniciarMocks().then(() => {
-  createRoot(document.getElementById('root')!).render(
-    <StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <RouterProvider router={router} />
-      </QueryClientProvider>
-    </StrictMode>,
-  )
-})
+// Os mocks sobem em paralelo com a primeira pintura da tela (melhor LCP).
+// O cliente Axios e o Socket.IO esperam o MSW antes de qualquer pedido.
+iniciarMocks()
+  .catch((erro) => console.error('Não foi possível iniciar a API simulada.', erro))
+  .finally(avisarQueMocksEstaoProntos)
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <RouterProvider router={router} />
+    </QueryClientProvider>
+  </StrictMode>,
+)

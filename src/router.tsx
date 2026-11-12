@@ -1,16 +1,9 @@
-import { createRootRouteWithContext, createRoute, createRouter, Outlet, redirect } from '@tanstack/react-router'
+import { createRootRouteWithContext, createRoute, createRouter, lazyRouteComponent, Outlet, redirect } from '@tanstack/react-router'
 import { Layout } from './components/Layout'
 import type { QueryClient } from '@tanstack/react-query'
 import { Home } from './pages/Home'
 import { DetalheNft } from './pages/DetalheNft'
 import { NaoEncontrado } from './pages/NaoEncontrado'
-import { Carrinho } from './pages/Carrinho'
-import { Login } from './pages/Login'
-import { Cadastro } from './pages/Cadastro'
-import { Perfil } from './pages/Perfil'
-import { Carteiras } from './pages/Carteiras'
-import { Pagamento } from './pages/Pagamento'
-import { Pedido } from './pages/Pedido'
 import { opcoesDaSessao } from './hooks/useSessao'
 import { destinoSeguro, sessaoAcabouDeExpirar } from './lib/sessao'
 import { queryClient } from './lib/queryClient'
@@ -80,7 +73,7 @@ const nftRoute = createRoute({
 const carrinhoRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/carrinho',
-  component: Carrinho,
+  component: lazyRouteComponent(() => import('./pages/Carrinho'), 'Carrinho'),
 })
 
 const loginRoute = createRoute({
@@ -91,7 +84,7 @@ const loginRoute = createRoute({
     const usuario = await context.queryClient.ensureQueryData(opcoesDaSessao)
     if (usuario) throw redirect({ href: destinoSeguro(search.redirect) })
   },
-  component: Login,
+  component: lazyRouteComponent(() => import('./pages/Login'), 'Login'),
 })
 
 const cadastroRoute = createRoute({
@@ -102,7 +95,7 @@ const cadastroRoute = createRoute({
     const usuario = await context.queryClient.ensureQueryData(opcoesDaSessao)
     if (usuario) throw redirect({ href: destinoSeguro(search.redirect) })
   },
-  component: Cadastro,
+  component: lazyRouteComponent(() => import('./pages/Cadastro'), 'Cadastro'),
 })
 
 // Rotas privadas ficam dentro desta. Sem sessão, vai para o login e volta depois.
@@ -124,25 +117,25 @@ export const autenticadoRoute = createRoute({
 const perfilRoute = createRoute({
   getParentRoute: () => autenticadoRoute,
   path: '/perfil',
-  component: Perfil,
+  component: lazyRouteComponent(() => import('./pages/Perfil'), 'Perfil'),
 })
 
 const carteirasRoute = createRoute({
   getParentRoute: () => autenticadoRoute,
   path: '/carteiras',
-  component: Carteiras,
+  component: lazyRouteComponent(() => import('./pages/Carteiras'), 'Carteiras'),
 })
 
 const pagamentoRoute = createRoute({
   getParentRoute: () => autenticadoRoute,
   path: '/pagamento',
-  component: Pagamento,
+  component: lazyRouteComponent(() => import('./pages/Pagamento'), 'Pagamento'),
 })
 
 const pedidoRoute = createRoute({
   getParentRoute: () => autenticadoRoute,
   path: '/pedidos/$id',
-  component: Pedido,
+  component: lazyRouteComponent(() => import('./pages/Pedido'), 'Pedido'),
 })
 
 const routeTree = rootRoute.addChildren([

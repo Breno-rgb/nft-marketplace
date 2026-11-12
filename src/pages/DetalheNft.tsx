@@ -86,7 +86,7 @@ export function DetalheNft() {
         <div className="flex gap-3">
           <div className="hidden w-20 flex-col gap-3 sm:flex">
             {[0, 1, 2, 3].map((n) => (
-              <img key={n} src={nft.imagem} alt="" className="aspect-square rounded border border-borda object-cover" />
+              <img key={n} src={nft.imagem} alt="" width={80} height={80} loading="lazy" className="aspect-square rounded border border-borda object-cover" />
             ))}
           </div>
           <img
@@ -94,6 +94,7 @@ export function DetalheNft() {
             alt={nft.nome}
             width={500}
             height={500}
+            fetchPriority="high"
             className="aspect-square w-full rounded-lg border border-borda object-cover"
           />
         </div>

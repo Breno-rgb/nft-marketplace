@@ -4,9 +4,11 @@ import type { Nft } from '../types/nft'
 
 type Props = {
   nft: Nft
+  // Cards que aparecem sem rolar a página carregam a imagem na hora, com prioridade alta.
+  prioridade?: boolean
 }
 
-export function NftCard({ nft }: Props) {
+export function NftCard({ nft, prioridade = false }: Props) {
   const [semImagem, setSemImagem] = useState(false)
 
   return (
@@ -21,7 +23,8 @@ export function NftCard({ nft }: Props) {
             <img
               src={nft.imagem}
               alt={nft.nome}
-              loading="lazy"
+              loading={prioridade ? 'eager' : 'lazy'}
+              fetchPriority={prioridade ? 'high' : 'auto'}
               width={250}
               height={250}
               className="h-full w-full object-cover"

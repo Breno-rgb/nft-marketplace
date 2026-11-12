@@ -123,7 +123,7 @@ export function Home() {
             >
               {isPending
                 ? Array.from({ length: POR_PAGINA }, (_, i) => <NftCardSkeleton key={i} />)
-                : data?.itens.map((nft) => <NftCard key={nft.id} nft={nft} />)}
+                : data?.itens.map((nft, i) => <NftCard key={nft.id} nft={nft} prioridade={i < 4} />)}
             </div>
 
             {data && data.totalPaginas > 1 && (

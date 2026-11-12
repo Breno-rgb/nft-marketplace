@@ -1,5 +1,6 @@
 import { useSyncExternalStore } from 'react'
 import type { Socket } from 'socket.io-client'
+import { mocksProntos } from './ambiente'
 import { queryClient } from './queryClient'
 import { obterToken } from './sessao'
 import { avisar } from './avisos'
@@ -135,6 +136,7 @@ let geracao = 0
 export async function conectarTempoReal(usuarioId: string | null) {
   desconectarTempoReal()
   const minha = ++geracao
+  await mocksProntos
   const { io } = await import('socket.io-client')
   if (minha !== geracao) return
   const token = obterToken()
