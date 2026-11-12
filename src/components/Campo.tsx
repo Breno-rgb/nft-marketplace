@@ -1,4 +1,6 @@
 import { useState, type InputHTMLAttributes } from 'react'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {
   id: string
@@ -7,6 +9,7 @@ type Props = InputHTMLAttributes<HTMLInputElement> & {
   dica?: string
 }
 
+// Campo de formulário: Label + Input do shadcn/ui, com dica, erro e botão Mostrar/Ocultar para senha.
 export function Campo({ id, rotulo, erro, dica, type = 'text', ...resto }: Props) {
   const [visivel, setVisivel] = useState(false)
   const ehSenha = type === 'password'
@@ -14,18 +17,16 @@ export function Campo({ id, rotulo, erro, dica, type = 'text', ...resto }: Props
 
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sm font-bold">
+      <Label htmlFor={id} className="font-bold">
         {rotulo}
-      </label>
+      </Label>
       <div className="relative">
-        <input
+        <Input
           id={id}
           type={ehSenha && visivel ? 'text' : type}
           aria-invalid={erro ? true : undefined}
           aria-describedby={descricao}
-          className={`w-full rounded border bg-fundo px-3 py-2.5 text-sm text-texto placeholder:text-apagado/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-laranja ${
-            erro ? 'border-red-400' : 'border-borda'
-          } ${ehSenha ? 'pr-20' : ''}`}
+          className={`h-10 bg-fundo text-texto md:text-sm ${ehSenha ? 'pr-20' : ''}`}
           {...resto}
         />
         {ehSenha && (

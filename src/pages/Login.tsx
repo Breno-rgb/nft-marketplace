@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useRouter, useSearch } from '@tanstack/react-router'
 import { LayoutDeConta } from '../components/LayoutDeConta'
 import { Campo } from '../components/Campo'
+import { Button } from '@/components/ui/button'
 import { useEntrar } from '../hooks/useSessao'
 import { validarLogin, type ErrosDeCampo } from '../lib/validacao'
 import { mensagemDeErro } from '../lib/erros'
@@ -67,13 +68,9 @@ export function Login() {
           onChange={(e) => setSenha(e.target.value)}
           erro={erros.senha}
         />
-        <button
-          type="submit"
-          disabled={entrar.isPending}
-          className="rounded bg-laranja py-3 text-sm font-bold text-fundo hover:bg-laranja-escuro disabled:cursor-wait disabled:opacity-70"
-        >
+        <Button type="submit" size="lg" disabled={entrar.isPending}>
           {entrar.isPending ? 'ENTRANDO...' : 'ENTRAR'}
-        </button>
+        </Button>
       </form>
       <p className="mt-6 text-sm text-apagado">
         Ainda não tem conta?{' '}

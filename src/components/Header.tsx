@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useRouterState } from '@tanstack/react-router'
 import { useCarrinho } from '../hooks/useCarrinho'
 import { useSair, useUsuario } from '../hooks/useSessao'
 import { avisar } from '../lib/avisos'
 import { Avatar } from './Avatar'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 
 const emBreve = ['Criadores', 'Aprenda']
 
@@ -77,30 +77,11 @@ function AreaDoUsuario() {
 }
 
 function MenuDoUsuario({ nome, avatar }: { nome: string; avatar: string | null }) {
-  const [aberto, setAberto] = useState(false)
-  const areaRef = useRef<HTMLDivElement>(null)
   const sair = useSair()
   const navigate = useNavigate()
   const primeiroNome = nome.split(' ')[0]
 
-  useEffect(() => {
-    if (!aberto) return
-    function fecharSeForFora(evento: MouseEvent) {
-      if (!areaRef.current?.contains(evento.target as Node)) setAberto(false)
-    }
-    function fecharComEsc(evento: KeyboardEvent) {
-      if (evento.key === 'Escape') setAberto(false)
-    }
-    document.addEventListener('mousedown', fecharSeForFora)
-    document.addEventListener('keydown', fecharComEsc)
-    return () => {
-      document.removeEventListener('mousedown', fecharSeForFora)
-      document.removeEventListener('keydown', fecharComEsc)
-    }
-  }, [aberto])
-
   function encerrar() {
-    setAberto(false)
     sair.mutate(undefined, {
       onSettled: () => {
         avisar('Você saiu da sua conta.', 'info')
@@ -109,34 +90,26 @@ function MenuDoUsuario({ nome, avatar }: { nome: string; avatar: string | null }
     })
   }
 
-  const itemDoMenu = 'block w-full px-4 py-2 text-left text-sm hover:bg-fundo hover:text-laranja focus-visible:bg-fundo focus-visible:text-laranja focus-visible:outline-none'
-
+  // DropdownMenu do shadcn/ui (Radix): setas do teclado, Esc, clique fora e foco já resolvidos.
   return (
-    <div ref={areaRef} className="relative">
-      <button
-        type="button"
-        onClick={() => setAberto((v) => !v)}
-        aria-expanded={aberto}
-        aria-controls="menu-usuario"
+    <DropdownMenu>
+      <DropdownMenuTrigger
         aria-label={`${primeiroNome}, abrir menu da conta`}
         className="flex items-center gap-2 rounded px-1 text-sm hover:text-laranja focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laranja"
       >
         <Avatar nome={nome} avatar={avatar} />
         <span className="hidden sm:inline">{primeiroNome}</span>
-      </button>
-      {aberto && (
-        <div id="menu-usuario" className="absolute right-0 z-40 mt-2 w-48 overflow-hidden rounded border border-borda bg-superficie py-1 shadow-lg">
-          <Link to="/perfil" onClick={() => setAberto(false)} className={itemDoMenu}>
-            Meu perfil
-          </Link>
-          <Link to="/carteiras" onClick={() => setAberto(false)} className={itemDoMenu}>
-            Carteiras
-          </Link>
-          <button type="button" onClick={encerrar} className={itemDoMenu}>
-            Sair
-          </button>
-        </div>
-      )}
-    </div>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-48 border border-borda bg-superficie text-texto">
+        <DropdownMenuItem asChild>
+          <Link to="/perfil">Meu perfil</Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link to="/carteiras">Carteiras</Link>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onSelect={encerrar}>Sair</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   )
 }

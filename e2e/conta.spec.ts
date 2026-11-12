@@ -40,7 +40,7 @@ test('logout limpa os dados e outra conta não vê os favoritos da primeira', as
   await expect(page.locator('#titulo-favoritos ~ div article')).toHaveCount(2)
 
   await page.getByRole('button', { name: /abrir menu da conta/ }).click()
-  await page.getByRole('button', { name: 'Sair' }).click()
+  await page.getByRole('menuitem', { name: 'Sair' }).click()
   await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
 
   await entrarDireto(page, BRUNO)

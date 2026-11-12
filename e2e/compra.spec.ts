@@ -80,7 +80,7 @@ test('outro usuário não abre o pedido', async ({ page }) => {
   const caminho = new URL(page.url()).pathname
 
   await page.getByRole('button', { name: /abrir menu da conta/ }).click()
-  await page.getByRole('button', { name: 'Sair' }).click()
+  await page.getByRole('menuitem', { name: 'Sair' }).click()
   await expect(page.getByRole('link', { name: 'Entrar' })).toBeVisible()
   await entrarDireto(page, BRUNO)
   await page.goto(caminho)

@@ -37,9 +37,3 @@ export function Cartao({ titulo, descricao, children, id }: { titulo: string; de
     </section>
   )
 }
-
-export const botaoPrincipal =
-  'rounded bg-laranja px-5 py-2.5 text-sm font-bold text-fundo hover:bg-laranja-escuro disabled:cursor-wait disabled:opacity-60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laranja focus-visible:ring-offset-2 focus-visible:ring-offset-fundo'
-
-export const botaoSecundario =
-  'rounded border border-borda px-4 py-2 text-sm hover:border-laranja hover:text-laranja disabled:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-laranja'

@@ -1,6 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap');
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
+/* Cores do Figma (Kurio). Usadas direto nas telas: bg-fundo, text-laranja... */
 @theme {
   --font-mono: "Space Mono", ui-monospace, monospace;
   --color-fundo: #16100c;
@@ -12,8 +15,63 @@
   --color-apagado: #a8988a;
 }
 
-body {
-  @apply bg-fundo text-texto font-mono;
+/* Tokens do shadcn/ui apontando para as mesmas cores, para os componentes seguirem a identidade do Kurio. */
+@theme inline {
+  --font-sans: var(--font-mono);
+  --font-heading: var(--font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  --radius: 0.5rem;
+  --background: #16100c;
+  --foreground: #f2e6d8;
+  --card: #221912;
+  --card-foreground: #f2e6d8;
+  --popover: #221912;
+  --popover-foreground: #f2e6d8;
+  --primary: #e0914f;
+  --primary-foreground: #16100c;
+  --secondary: #3a2a1e;
+  --secondary-foreground: #f2e6d8;
+  --muted: #221912;
+  --muted-foreground: #a8988a;
+  --accent: #2c2017;
+  --accent-foreground: #e0914f;
+  --destructive: #f87171;
+  --border: #3a2a1e;
+  --input: #3a2a1e;
+  --ring: #e0914f;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-fundo text-texto font-mono;
+  }
 }
 
 .shimmer {

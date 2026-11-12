@@ -7,6 +7,7 @@ import { Dialogo } from '../components/Dialogo'
 import { mensagemDeErro } from '../lib/erros'
 import { NftCard } from '../components/NftCard'
 import { BotaoFavorito } from '../components/BotaoFavorito'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { NaoEncontrado } from './NaoEncontrado'
 import type { TipoEdicao } from '../types/nft'
 
@@ -17,7 +18,6 @@ export function DetalheNft() {
   const { data: nft, isPending, isError, error, refetch } = useNft(id)
   const [edicao, setEdicao] = useState<TipoEdicao | null>(null)
   const [quantidade, setQuantidade] = useState(1)
-  const [aba, setAba] = useState<'detalhes' | 'avaliacoes'>('detalhes')
 
   const relacionados = useNfts({ colecao: nft?.colecao, porPagina: 6 })
   const adicionar = useAdicionarAoCarrinho()
@@ -219,28 +219,24 @@ export function DetalheNft() {
         </div>
       </div>
 
-      <section className="mt-12">
-        <div role="tablist" aria-label="Informações do NFT" className="flex gap-6 border-b border-borda text-sm">
-          {(['detalhes', 'avaliacoes'] as const).map((item) => (
-            <button
-              key={item}
-              role="tab"
-              aria-selected={aba === item}
-              onClick={() => setAba(item)}
-              className={`-mb-px border-b-2 pb-2 ${aba === item ? 'border-laranja text-laranja' : 'border-transparent text-apagado'}`}
-            >
-              {item === 'detalhes' ? 'Detalhes do NFT' : `Avaliações de colecionadores (${nft.avaliacoes})`}
-            </button>
-          ))}
-        </div>
-        <div role="tabpanel" className="mt-4 text-sm text-apagado">
-          {aba === 'detalhes' ? (
-            <p>{nft.descricao} Rede: {nft.rede}. Contrato verificado.</p>
-          ) : (
-            <p>As avaliações ficam disponíveis para colecionadores autenticados.</p>
-          )}
-        </div>
-      </section>
+      <Tabs defaultValue="detalhes" className="mt-12">
+        <TabsList variant="line" aria-label="Informações do NFT" className="w-full justify-start gap-6 border-b border-borda p-0">
+          <TabsTrigger value="detalhes" className="flex-none px-0 pb-2 text-apagado data-active:text-laranja after:bg-laranja">
+            Detalhes do NFT
+          </TabsTrigger>
+          <TabsTrigger value="avaliacoes" className="flex-none px-0 pb-2 text-apagado data-active:text-laranja after:bg-laranja">
+            Avaliações de colecionadores ({nft.avaliacoes})
+          </TabsTrigger>
+        </TabsList>
+        <TabsContent value="detalhes" className="mt-4 text-apagado">
+          <p>
+            {nft.descricao} Rede: {nft.rede}. Contrato verificado.
+          </p>
+        </TabsContent>
+        <TabsContent value="avaliacoes" className="mt-4 text-apagado">
+          <p>As avaliações ficam disponíveis para colecionadores autenticados.</p>
+        </TabsContent>
+      </Tabs>
 
       {outros.length > 0 && (
         <section className="mt-12" aria-labelledby="titulo-colecao">

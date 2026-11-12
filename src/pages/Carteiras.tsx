@@ -1,7 +1,9 @@
 import { useState, type FormEvent } from 'react'
 import { Campo } from '../components/Campo'
 import { Dialogo } from '../components/Dialogo'
-import { botaoPrincipal, botaoSecundario, LayoutDaConta } from '../components/LayoutDaConta'
+import { Badge } from '@/components/ui/badge'
+import { LayoutDaConta } from '../components/LayoutDaConta'
+import { botaoPrincipal, botaoSecundario } from '../lib/estilosDeBotao'
 import { useAtualizarCarteira, useCadastrarCarteira, useCarteiras, useRemoverCarteira } from '../hooks/usePerfil'
 import { validarCarteira, type ErrosDeCampo } from '../lib/validacao'
 import { errosDosCampos, mensagemDeErro } from '../lib/erros'
@@ -100,7 +102,7 @@ function EspacoDeCarteira({ tipo, carteira, temPrincipal }: { tipo: TipoDeCartei
         <h2 id={tituloId} className="text-lg font-bold">
           {nomeDoTipo[tipo]}
         </h2>
-        {tipo === 'principal' && carteira && <span className="rounded bg-laranja/15 px-2 py-0.5 text-xs text-laranja">Usada no pagamento</span>}
+        {tipo === 'principal' && carteira && <Badge variant="outline" className="border-laranja/50 text-laranja">Usada no pagamento</Badge>}
       </div>
 
       {editando ? (

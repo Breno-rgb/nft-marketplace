@@ -1,8 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { CENARIOS_PADRAO, lerCenarios, OPCOES_DE_CENARIO, salvarCenarios, type Cenarios } from '../mocks/cenarios'
 import { avisar } from '../lib/avisos'
 import { useEstadoDoTempoReal } from '../lib/tempoReal'
+import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 const chaves = Object.keys(OPCOES_DE_CENARIO) as (keyof Cenarios)[]
 
@@ -10,17 +12,9 @@ const chaves = Object.keys(OPCOES_DE_CENARIO) as (keyof Cenarios)[]
 export function PainelDeCenarios() {
   const [aberto, setAberto] = useState(false)
   const [cenarios, setCenarios] = useState<Cenarios>(lerCenarios)
-  const dialogo = useRef<HTMLDialogElement>(null)
   const queryClient = useQueryClient()
   const tempoReal = useEstadoDoTempoReal()
   const alterados = chaves.filter((chave) => cenarios[chave] !== CENARIOS_PADRAO[chave]).length
-
-  useEffect(() => {
-    const elemento = dialogo.current
-    if (!elemento) return
-    if (aberto && !elemento.open) elemento.showModal()
-    if (!aberto && elemento.open) elemento.close()
-  }, [aberto])
 
   function mudar(chave: keyof Cenarios, valor: string) {
     const novos = { ...cenarios, [chave]: valor }
@@ -54,16 +48,12 @@ export function PainelDeCenarios() {
         Cenários{alterados > 0 && <span className="ml-1 text-laranja">({alterados})</span>}
         <span className="sr-only"> da API simulada</span>
       </button>
-      <dialog
-        ref={dialogo}
-        onClose={() => setAberto(false)}
-        aria-labelledby="titulo-cenarios"
-        className="m-auto w-[min(92vw,480px)] rounded-lg border border-borda bg-superficie p-6 text-texto backdrop:bg-black/70"
-      >
-        <h2 id="titulo-cenarios" className="text-lg font-bold">
-          Cenários da API simulada
-        </h2>
-        <p className="mt-1 text-xs text-apagado">Valem na hora, para as próximas requisições. Ficam salvos neste navegador.</p>
+      <Dialog open={aberto} onOpenChange={setAberto}>
+        <DialogContent className="max-h-[90vh] w-[min(92vw,480px)] overflow-y-auto border-borda bg-superficie text-texto sm:max-w-[480px]">
+        <DialogHeader>
+          <DialogTitle className="text-lg font-bold">Cenários da API simulada</DialogTitle>
+          <DialogDescription className="text-xs text-apagado">Valem na hora, para as próximas requisições. Ficam salvos neste navegador.</DialogDescription>
+        </DialogHeader>
         <div className="mt-5 grid gap-4">
           {chaves.map((chave) => (
             <div key={chave} className="grid grid-cols-[1fr_auto] items-center gap-3">
@@ -118,12 +108,13 @@ export function PainelDeCenarios() {
             <button type="button" onClick={restaurar} className="rounded border border-borda px-3 py-2 text-xs hover:border-laranja">
               Padrão
             </button>
-            <button type="button" onClick={() => setAberto(false)} className="rounded bg-laranja px-4 py-2 text-xs font-bold text-fundo">
+            <Button size="sm" onClick={() => setAberto(false)}>
               Fechar
-            </button>
+            </Button>
           </div>
         </div>
-      </dialog>
+        </DialogContent>
+      </Dialog>
     </>
   )
 }

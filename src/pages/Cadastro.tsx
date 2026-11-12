@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, useRouter, useSearch } from '@tanstack/react-router'
 import { LayoutDeConta } from '../components/LayoutDeConta'
 import { Campo } from '../components/Campo'
+import { Button } from '@/components/ui/button'
 import { useCadastrar } from '../hooks/useSessao'
 import { validarCadastro, type ErrosDeCampo } from '../lib/validacao'
 import { errosDosCampos, mensagemDeErro } from '../lib/erros'
@@ -88,13 +89,9 @@ export function Cadastro() {
           onChange={(e) => mudar('confirmacao', e.target.value)}
           erro={erros.confirmacao}
         />
-        <button
-          type="submit"
-          disabled={cadastrar.isPending}
-          className="rounded bg-laranja py-3 text-sm font-bold text-fundo hover:bg-laranja-escuro disabled:cursor-wait disabled:opacity-70"
-        >
+        <Button type="submit" size="lg" disabled={cadastrar.isPending}>
           {cadastrar.isPending ? 'CRIANDO CONTA...' : 'CRIAR CONTA'}
-        </button>
+        </Button>
       </form>
       <p className="mt-6 text-sm text-apagado">
         Já tem conta?{' '}

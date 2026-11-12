@@ -1,3 +1,4 @@
+import { Badge } from '@/components/ui/badge'
 import type { Cupom } from '../types/carrinho'
 import type { ItemDoPedido, ResumoDeValores as Resumo } from '../types/pedido'
 
@@ -15,7 +16,7 @@ export function ListaDeItens({ itens, destaques = [] }: { itens: ItemDoPedido[];
               <p className="text-xs text-apagado">
                 Edição {item.edicao} · {item.quantidade} × {item.precoEth} ETH
               </p>
-              {mudou && <p className="text-xs text-laranja">Preço atualizado</p>}
+              {mudou && <Badge className="mt-1">Preço atualizado</Badge>}
             </div>
             <p className={`text-sm font-bold ${mudou ? 'text-laranja' : ''}`}>{item.totalEth} ETH</p>
           </li>

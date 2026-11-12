@@ -3,9 +3,10 @@ import { abrir } from './apoio'
 
 test('busca, filtros e ordenação ficam na URL e sobrevivem ao refresh @mobile', async ({ page }) => {
   await abrir(page, '/')
+  await expect(page.locator('#catalogo article').first()).toBeVisible()
   const filtros = page.getByRole('complementary', { name: 'Filtros' })
-  const botaoFiltros = filtros.getByRole('button', { expanded: false })
-  if (await botaoFiltros.isVisible()) await botaoFiltros.click()
+  const mostrarFiltros = filtros.getByRole('button', { name: 'Mostrar filtros' })
+  if (await mostrarFiltros.isVisible()) await mostrarFiltros.click()
 
   await filtros.getByRole('checkbox', { name: /Música/ }).check()
   await page.getByLabel('Ordenar por').selectOption('menor-preco')
